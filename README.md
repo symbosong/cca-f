@@ -53,7 +53,7 @@
 
 | 文件 | 主题 | 核心内容 | 难度 |
 |------|------|---------|:----:|
-| [WorkBuddy与Claude_Cowork深度对比分析](WorkBuddy与Claude_Cowork深度对比分析.html) | 产品对比 | 腾讯 WorkBuddy vs Anthropic Claude Cowork 深度对比（网页版深度解析报告），涵盖架构、协作机制与场景选型 | ⭐⭐⭐ |
+| [WorkBuddy与Claude_Cowork深度对比分析](WorkBuddy与Claude_Cowork深度对比分析.md) | 产品对比 | 腾讯 WorkBuddy vs Anthropic Claude Cowork 深度对比解析报告，涵盖架构、协作机制与场景选型 | ⭐⭐⭐ |
 
 ---
 
@@ -127,7 +127,7 @@ git clone https://github.com/anthropics/courses.git
 ├── 13_安全护栏与生产部署.md        ← 生产安全基线
 ├── 14_成本优化与模型选择策略.md    ← 模型选型 + 成本控制
 ├── 15_CCA-F认证考试备考指南.md     ← ⭐ CCA-F 认证备考
-└── WorkBuddy与Claude_Cowork深度对比分析.html ← 💡 网页版产品对标分析报告
+└── WorkBuddy与Claude_Cowork深度对比分析.md ← 💡 产品对标深度分析报告
 ```
 
 ---
