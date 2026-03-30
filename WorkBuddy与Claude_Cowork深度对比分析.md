@@ -1,491 +1,903 @@
-# Claude Code & Cowork 深度研究笔记
+#  WorkBuddy  vs  Claude Cowork
 
-> **版本**：v3.0 — 2026年3月24日  
-> **资料来源**：以 Anthropic 官方文档和产品页为主，第三方资料作为补充，明确标注来源可靠性
+AI 桌面办公智能体双雄深度对比 — 从产品定位、核心架构到每一个功能细节的全方位解析
 
----
+2026 年 3 月 · 基于官方文档、产品页面与实测体验整理
 
-## 目录
+腾讯 · WorkBuddy
 
-- [第一部分：Claude Code 深度研究](#第一部分claude-code-深度研究)
-- [第二部分：Claude Cowork 深度研究](#第二部分claude-cowork-深度研究)
-- [第三部分：Claude Code vs Cowork 对比分析](#第三部分claude-code-vs-cowork-对比分析)
-- [第四部分：统一引擎与产品矩阵](#第四部分统一引擎与产品矩阵)
-- [第五部分：学习资料与参考链接](#第五部分学习资料与参考链接)
+Anthropic · Claude Cowork
 
----
+15+ 维度深度对比
 
-# 第一部分：Claude Code 深度研究
+-  总览
 
-## 1.1 产品定位
+-  产品定位
 
-**一句话**：面向开发者的代理式编码工具（Agentic Coding Tool）。
+-  技术架构
 
-Claude Code 不是简单的代码补全工具，它是一个**能理解整个代码库、跨文件操作、自主规划和执行的编程代理**。它可以规划方案 → 编写代码 → 运行测试 → 验证结果，形成完整的自动化循环。
+-  工作模式
 
-> **官方定义**（来源：[code.claude.com/docs/en/overview](https://code.claude.com/docs/en/overview)）：  
-> "Claude Code understands your entire codebase, works across files and tools, and connects to the same engine whether you're in a terminal, IDE, desktop app, or browser."
+-  文件操作
 
-## 1.2 五种使用形态
+-  技能/插件
 
-Claude Code 不只是终端工具——它有 **5 种** 交互形态，共享同一个底层引擎：
+-  多智能体
 
-| 形态 | 平台 | 特点 |
-|------|------|------|
-| **CLI（终端）** | macOS / Linux / Windows (WSL) | 最原始的形态，遵循 Unix 哲学，支持管道和脚本化 |
-| **VS Code 扩展** | VS Code / Cursor / Trae 等 | 官方 GUI，内联差异、@提及、检查点、Plugins 管理器 |
-| **JetBrains 插件** | IntelliJ IDEA / PyCharm / WebStorm 等 | 官方支持，交互式差异和上下文共享 |
-| **Desktop 桌面应用** | macOS / Windows | 独立图形应用，支持计算机使用、PR 监控、并行会话 |
-| **Web 浏览器版** | 任何浏览器 | 无需本地设置，云端运行，支持长任务和多任务并行 |
+-  平台集成
 
-> **来源**：[code.claude.com/docs/en/overview](https://code.claude.com/docs/en/overview) + [code.claude.com/docs/en/desktop](https://code.claude.com/docs/en/desktop)
+-  场景对比
 
-### CLI vs Desktop 功能差异
+-  安全机制
 
-| 功能 | CLI | Desktop |
-|------|-----|---------|
-| 权限模式 | 所有模式（包括 dontAsk） | 询问权限、自动接受编辑、计划、绕过权限 |
-| 第三方 LLM 提供商 | Bedrock、Vertex、Foundry | 不可用 |
-| MCP 服务器 | 设置文件配置 | 连接器 UI |
-| 文件附件 | 不可用 | 支持图片、PDF |
-| 计算机使用 | 不可用 | macOS 上的屏幕控制 |
-| 代理团队 | 支持 | 不可用 |
-| 脚本和自动化 | `--print`、Agent SDK | 不可用 |
-| 并行会话 | 分开终端窗口 | 侧边栏标签 + 自动 Worktrees |
+-  平台支持
 
-## 1.3 核心功能详解
+-  定价模型
 
-### 1.3.1 代码操作与构建
+-  发展时间线
 
-- **功能构建**：跨文件编写代码，理解项目完整上下文
-- **Bug 修复**：分析错误信息 → 追踪根因 → 实施修复
-- **自动化琐事**：编写测试、修复 Lint 错误、解决合并冲突、更新依赖、编写发布说明
-- **Git 集成**：暂存更改、编写提交信息、创建分支、打开 PR
+-  选型建议
 
-### 1.3.2 CLAUDE.md —— 项目记忆系统
+Section 01
 
-CLAUDE.md 是 Claude Code 的**持久化上下文文件**，相当于给 Claude 的项目说明书。
+## 一图看清全局
 
-**三级作用域**：
+两款产品的核心数据一览
 
-| 作用域 | 位置 | 用途 |
-|--------|------|------|
-| 组织级 | `/Library/Application Support/ClaudeCode/CLAUDE.md` (macOS) | 全组织安全策略、合规要求 |
-| 项目级 | `./CLAUDE.md` 或 `./.claude/CLAUDE.md` | 编码标准、架构决策、审查清单 |
-| 用户级 | `~/.claude/CLAUDE.md` | 个人偏好设置 |
+腾讯
 
-**最佳实践**：
-- 每文件控制在 **200 行以内**
-- 使用具体、可验证的指令（✅ "使用 2 空格缩进" ❌ "格式化代码"）
-- 可用 `@path` 语法导入其他文件
-- 用 `/init` 命令自动生成初始文件
-- 大型项目可拆分到 `.claude/rules/` 目录
+WorkBuddy 出品方
 
-> **来源**：[code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory)
+Anthropic
 
-### 1.3.3 Hooks —— 自动化工作流
+Claude Cowork 出品方
 
-Hooks 是用户定义的 shell 命令、HTTP 端点或 LLM 提示，在 Claude Code 生命周期的特定点自动执行。
+5+
 
-**四种 Hook 类型**：
+WorkBuddy 支持模型数
 
-| 类型 | 描述 | 适用场景 |
-|------|------|----------|
-| **command** | 运行 shell 命令 | 接收 JSON，通过退出码和 stdout 返回 |
-| **http** | 发送 HTTP POST | 集成外部服务 |
-| **prompt** | 发送提示给 Claude | 单轮是/否决策判断 |
-| **agent** | 生成子代理 | 多轮验证，可读取文件和搜索代码 |
+1
 
-**核心事件**：PreToolUse（工具执行前，可阻止危险操作）、PostToolUse（工具执行后）、SessionStart/End、UserPromptSubmit 等。
+Cowork 底层模型
 
-**实用场景**：
-- 阻止 `rm -rf` 等危险命令
-- 编辑后自动运行测试
-- 提交前自动 Lint
-- 审计日志记录
+Win+Mac
 
-> **来源**：[code.claude.com/docs/en/hooks](https://code.claude.com/docs/en/hooks)
+两者均支持
 
-### 1.3.4 MCP（Model Context Protocol）
+2026.Q1
 
-通过开放标准连接外部数据源和工具：
-- Google Drive 设计文档
-- Jira 工单
-- Slack 数据
-- 自定义 API 和工具
+两者同期推出
 
-### 1.3.5 Agent Teams —— 多代理团队（实验性）
+维度
 
-允许多个 Claude Code 实例协同工作，由一个"团队负责人"协调。
+🟢 WorkBuddy（腾讯）
 
-**与子代理的区别**：
+🟣 Claude Cowork（Anthropic）
 
-| 特性 | Subagents（子代理） | Agent Teams（代理团队） |
-|------|---------------------|------------------------|
-| 上下文 | 独立窗口，结果返回调用者 | 完全独立运作 |
-| 通信 | 仅向主代理汇报 | 队友之间直接消息传递 |
-| 协调 | 主代理管理所有工作 | 共享任务列表，自我协调 |
-| 适用场景 | 专注任务 | 需要讨论和协作的复杂工作 |
+发布时间  2026.1.19 内测 → 2026.3.9 公测  2026.1.12 Research Preview
 
-**最佳场景**：
-- 多人研究和审查
-- 竞争性假设调试
-- 跨前端/后端/测试的协调开发
+一句话定位  AI 原生桌面智能体工作台 —— "一句话让 AI 替你上班"  给非程序员用的 Claude Code —— "你的第一位 AI 同事"
 
-> **来源**：[code.claude.com/docs/en/agent-teams](https://code.claude.com/docs/en/agent-teams)
+底层来源  基于 CodeBuddy 引擎，兼容 OpenClaw 技能生态  底层即 Claude Code 引擎，由 Claude Code 1.5 周内自行编写
 
-### 1.3.6 CI/CD 集成
+目标用户  全角色职场人——运营、行政、销售、产品、创作者  非技术知识工作者——白领、法务、行政、营销
 
-**GitHub Actions**：
-- 在 PR 或 Issue 评论中 `@claude` 即可触发
-- 自动代码审查、Bug 修复、PR 创建
-- 遵守 CLAUDE.md 中的项目规范
-- 支持 AWS Bedrock 和 Google Vertex AI（通过 OIDC 安全连接）
-- 已到 v1.0 GA 版本
+操作系统   macOS + Windows （同时支持）   macOS + Windows （2026.3 新增 Win）
 
-> **来源**：[code.claude.com/docs/en/github-actions](https://code.claude.com/docs/en/github-actions)
+核心模型  多模型可切换（混元、DeepSeek 等 5+）  Claude Sonnet 4.6（单一模型）
 
-### 1.3.7 Desktop 专属功能
+IM 联动   微信 / 企微 / 飞书 / 钉钉 / QQ    手机端 ↔ 桌面端同步（2026.3.17）
 
-| 功能 | 说明 |
-|------|------|
-| **视觉化差异审查** | 逐文件审查代码修改，支持行级注释 |
-| **实时应用预览** | 嵌入式浏览器预览前端/后端，自动截图验证 |
-| **计算机使用** | macOS 研究预览，可打开应用、控制屏幕（需 Pro/Max） |
-| **GitHub PR 监控** | 自动监控 CI 检查、自动修复失败、自动合并 |
-| **并行会话** | 侧边栏多会话，每会话自动 Git Worktree 隔离 |
-| **Dispatch 集成** | Cowork 中的持久对话可直接请求 Code 会话 |
-| **定期任务** | 本地或远程（Anthropic 云端托管）定时执行 |
-| **连接器** | Google Calendar、Slack、GitHub、Linear、Notion 等 |
+三方连接器  MCP Server 内置 + Skills 扩展  Google Drive / Slack / Notion / Salesforce 等 30+ 连接器
 
-> **来源**：[code.claude.com/docs/en/desktop](https://code.claude.com/docs/en/desktop)
+计划任务  通过 IM 指令远程触发   Cron 定时任务（2026.2.25）
 
-## 1.4 安全架构
+定价  免费体验补贴 + Token 计费  Pro $20/月（有限）→ Max $100-200/月
 
-### 1.4.1 沙箱化（Sandboxing）
+数据隐私  本地运行，数据不上云  本地沙盒隔离，对话历史存本地
 
-Claude Code 的沙箱基于 **OS 级原语**，不是虚拟机：
-- **macOS**：使用 Apple **Seatbelt**（沙箱配置文件）
-- **Linux**：使用 **bubblewrap**
+多智能体   多 Agent 并行    子代理(Sub-agent)协作
 
-**双重隔离边界**：
+Computer Use   不支持    2026.3.23 上线 （屏幕控制 + 应用操作）
 
-1. **文件系统隔离**：限制只能访问当前工作目录，禁止访问 SSH 密钥等敏感文件
-2. **网络隔离**：沙箱内进程不直接拥有互联网访问，必须通过 **Unix 域套接字**连接到外部代理服务器，该代理强制执行域名白名单
+记忆功能  私有化本地知识库  跨会话记忆 +  .claude-instructions  文件夹指令
 
-**Cloud 版额外安全**：
-- Git 凭据**永远不会**进入沙箱
-- 使用自定义代理服务验证 Git 操作内容
-- 即使沙箱被攻破，攻击者也无法获取用户凭据
+产品阶段  正式公测  Research Preview（研究预览）
 
-**效果**：权限提示减少了 **84%**。
+Section 02
 
-> **来源**：[anthropic.com/engineering/claude-code-sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing)（作者：David Dworken, Oliver Weller-Davies，2025年10月20日）
+## 产品定位与设计哲学
 
-### 1.4.2 权限模式
+🦞
 
-| 模式 | 说明 |
-|------|------|
-| **询问权限** (default) | 每次编辑/执行前询问，推荐新用户 |
-| **自动接受编辑** (acceptEdits) | 自动接受文件修改，命令仍需确认 |
-| **计划模式** (plan) | 只分析和创建计划，不执行操作 |
-| **绕过权限** (bypassPermissions) | 无提示运行，仅用于沙箱容器中 |
+WorkBuddy — "腾讯版小龙虾"
 
-## 1.5 CLI 命令参考（精选）
+**核心理念**：将 AI Agent 做成"免部署版 OpenClaw"，砍掉技术门槛，**下载即用**。
 
-| 命令 | 说明 |
-|------|------|
-| `claude` | 启动交互式会话 |
-| `claude "query"` | 带初始提示启动 |
-| `claude -p "query"` | 打印模式（脚本集成用） |
-| `cat file \| claude -p "query"` | 管道处理 |
-| `claude -c` | 继续最近的对话 |
-| `claude -r "session" "query"` | 恢复指定会话 |
-| `claude -w feature-auth` | 在隔离 Git Worktree 中启动 |
-| `claude --remote "task"` | 在 claude.ai 上创建 Web 会话 |
-| `claude --teleport` | 在本地终端恢复 Web 会话 |
+**设计哲学**：
 
-> **来源**：[code.claude.com/docs/en/cli-reference](https://code.claude.com/docs/en/cli-reference)
+- **IM 驱动**——从微信/飞书/钉钉发指令，电脑自动干活，打破空间限制
 
----
+- **模型自由**——不绑定单一模型，用户可按任务切换混元、DeepSeek 等
 
-# 第二部分：Claude Cowork 深度研究
+- **生态继承**——完全兼容 OpenClaw 的 Skills 体系，存量技能直接可用
 
-## 2.1 产品定位
+- **成本控制**——优化模型架构降低 Token 消耗，号称"不是 Token 粉碎机"
 
-**一句话**：面向所有人的桌面知识工作代理（Agentic AI for Knowledge Work）。
+- **本地优先**——所有数据和操作在本地完成，不上云
 
-Cowork 不是聊天机器人——它是一个**能直接操作本地文件、执行多步骤任务、跨应用自动化的桌面代理**。目标用户不是开发者，而是市场营销、数据分析、运营、法律、金融等领域的知识工作者。
+**官方 slogan**："一句话让 AI 替你上班"
 
-> **官方定义**（来源：[anthropic.com/product/claude-cowork](https://www.anthropic.com/product/claude-cowork)）：  
-> Cowork 旨在处理那些"重复、繁琐且耗时的任务"，让用户"专注于决策和判断"。
+🤖
 
-> **与 Chat 的核心区别**（来源：[claude.com/product/cowork](https://claude.com/product/cowork)）：  
-> "Chat 仅回答消息，无法直接访问文件；Cowork 可以读取、编辑和创建指定文件夹中的文件。"
+Claude Cowork — "你的第一位 AI 同事"
 
-## 2.2 产品状态
+**核心理念**：将 Claude Code 的强大代理能力"下沉"到普通知识工作者。
 
-- **发布日期**：2026年1月12日（研究预览版）
-- **出品团队**：Anthropic Labs（Mike Krieger 领衔，Instagram 联合创始人）
-- **当前状态**：Research Preview（研究预览）
-- **平台支持**：macOS + Windows（位于 Claude 桌面应用中，与 Chat 和 Code 并列）
+**设计哲学**：
 
-> **来源**：[anthropic.com/news/introducing-anthropic-labs](https://www.anthropic.com/news/introducing-anthropic-labs)（2026年1月13日）
+- **Claude Code 平民化**——去掉命令行，换上 GUI，底层引擎完全相同
 
-## 2.3 核心功能详解
+- **委派式交互**——"描述结果和节奏"，Claude 自主选择最快路径执行
 
-### 2.3.1 本地文件操作
+- **三阶梯执行**——优先连接器 → 其次浏览器 → 最后屏幕操作
 
-| 能力 | 说明 |
-|------|------|
-| **文件整理** | 扫描文件夹（如 Downloads），按类型/日期分类、去重、归档 |
-| **数据提取** | 收据、发票、截图 → 格式化电子表格 |
-| **文档生成** | 结合公司模板和原始材料，按格式规范生成报告/演示文稿 |
-| **研究综合** | 读取多来源资料，识别相关信息，生成可审阅的摘要 |
-| **信息提取** | 从合同、报告等密集文档中提取关键信息，结构化呈现 |
+- **沙盒安全**——基于 Apple VZVirtualMachine 的隔离虚拟环境
 
-### 2.3.2 跨端协作与持久会话
+- **单模型深度**——只用 Claude，但把单一模型做到极致
 
-- **手机 ↔ 桌面同步**：手机上发送指令 → Claude 在桌面执行 → 结果发回手机
-- **跨会话记忆**：Claude 能记住之前对话的上下文
-- **定时任务**：设定频率（如"每天早上检查邮件"、"每周提取指标"），自动执行
+**官方 slogan**："Delegate to Claude, delight in the result"
 
-### 2.3.3 计算机使用（Computer Use）
+💡 哲学差异的本质
 
-Claude 可以直接与屏幕交互：
-- 打开应用程序
-- 浏览网页
-- 运行工具
+**WorkBuddy = 平台型**：多模型、多 IM、多 Skills，像一个可无限扩展的"AI 操作系统"
 
-**执行优先级**：连接器/集成工具 → 浏览器 → 屏幕交互（直接集成更快更精准）
+**Cowork = 产品型**：单模型、深集成、强安全，像一个智能且可靠的"AI 同事"
 
-> **来源**：[claude.com/product/cowork](https://claude.com/product/cowork)
+类比：WorkBuddy 像 Android（开放、可定制），Cowork 像 iOS（封闭、体验统一）
 
-### 2.3.4 插件系统
+Section 03
 
-| 组件 | 说明 |
-|------|------|
-| **技能** | 内置领域知识和最佳实践 |
-| **连接器** | 连接现有工具（Slack、Google Drive 等） |
-| **子代理** | 处理特定端到端任务的专用代理 |
+## 技术架构深度解析
 
-**角色化**：通过插件可以让 Claude 成为特定角色的专家——销售、财务、法务等。
+### WorkBuddy 架构
 
-### 2.3.5 Dispatch 与 Claude Code 联动
+IM 指令 / 桌面对话
 
-Dispatch 是 Cowork 标签页中的持久对话，可以直接请求 Claude Code 会话：
-- 修复 Bug
-- 更新依赖
-- 运行测试
-- 打开 PR
+→
 
-> **来源**：[code.claude.com/docs/en/desktop](https://code.claude.com/docs/en/desktop)
+自然语言理解
 
-## 2.4 安全架构
+→
 
-### 2.4.1 用户控制权
+任务拆解 & 规划
 
-| 机制 | 说明 |
-|------|------|
-| **显式访问授权** | 用户明确选择 Claude 可访问的文件夹和连接器 |
-| **事前确认** | 处理财务/个人/关键任务前必须先询问 |
-| **计划审批** | 重大操作前展示计划并等待批准 |
-| **管理员控制** | 企业管理员可全局关闭 Cowork |
+→
 
-### 2.4.2 隔离环境
+模型调度
 
-> **官方说法**（来源：[claude.com/product/cowork](https://claude.com/product/cowork)）：  
-> "Cowork 在独立的虚拟机（VM）中运行，网络访问通过设置中的允许列表控制。"
+混元/DeepSeek/...
 
-⚠️ **注意**：与 Claude Code 使用的 OS 级沙箱（Seatbelt / bubblewrap）不同，Cowork 官方明确使用了"虚拟机"（VM）一词。但 Anthropic 没有公开 VM 的具体技术实现（是哪种虚拟化技术、是完整 VM 还是轻量级容器等）。
+→
 
-### 2.4.3 数据隐私
+Skills + MCP 执行
 
-- **对话历史**存储在本地设备，**不**在 Anthropic 服务器
-- 企业审计日志**当前不会**捕获 Cowork 活动
-- **不适合** HIPAA、FedRAMP、FSI 等受监管的工作负载
+→
 
-## 2.5 工作模式
+交付结果
 
-**三步操作**：
-1. **描述需求** → 用户在桌面或手机上告知目标
-2. **Claude 执行** → 自动选择最快路径（连接器 → 浏览器 → 屏幕操作），重大操作前确认
-3. **结果交付** → 交付成品（格式化表格、备忘录），不是逐步更新
+架构层  WorkBuddy  Claude Cowork
 
----
+底层引擎
 
-# 第三部分：Claude Code vs Cowork 对比分析
+CodeBuddy 引擎 + OpenClaw 兼容层
 
-## 3.1 核心定位对比
+Claude Code 引擎（Claude Cowork 100% 由 Claude Code 编写）
 
-| 维度 | Claude Code | Cowork |
-|------|-------------|--------|
-| **一句话定义** | 面向开发者的代理式编码工具 | 面向所有人的桌面知识工作代理 |
-| **目标用户** | 开发者、DevOps、技术管理者 | 市场营销、数据分析、运营、法律、金融等 |
-| **核心场景** | 写代码、Debug、代码审查、CI/CD | 整理文件、生成报告、数据提取、自动化办公 |
-| **交互方式** | 终端 CLI + IDE 扩展 + 桌面应用 + Web | Claude 桌面应用中的标签页 |
-| **操作对象** | 代码库、Git 仓库、开发工具链 | 本地文件、文件夹、日常办公应用 |
+模型层
 
-## 3.2 技术架构对比
+多模型路由层：混元大模型、DeepSeek、可配置切换
 
-| 维度 | Claude Code | Cowork |
-|------|-------------|--------|
-| **底层引擎** | Claude Execution Engine (CEE) | Claude Execution Engine (CEE) |
-| **使用形态** | 5 种（CLI / VS Code / JetBrains / Desktop / Web） | 桌面应用中的标签页 + 手机远程发送 |
-| **沙箱技术** | OS 级原语（macOS Seatbelt / Linux bubblewrap） | 独立虚拟机（VM）（官方说法） |
-| **网络隔离** | Unix 域套接字代理 + 域名白名单 | 设置中的允许列表 |
-| **扩展机制** | MCP + Hooks + Plugins + Agent SDK | 插件（技能 + 连接器 + 子代理） |
-| **多代理** | Agent Teams（实验性，多实例协同） | Dispatch（可调用 Code 会话） |
-| **CI/CD** | GitHub Actions v1.0 GA / GitLab | 不适用 |
-| **Computer Use** | Desktop 版 macOS（研究预览） | 桌面端（连接器优先 → 浏览器 → 屏幕） |
+单一模型：Claude Sonnet 4.6（1M token 上下文）
 
-## 3.3 安全模型对比
+规划层
 
-| 维度 | Claude Code | Cowork |
-|------|-------------|--------|
-| **隔离级别** | 进程级沙箱（OS 原语） | VM 级隔离 |
-| **权限控制** | 4 种权限模式（default / acceptEdits / plan / bypassPermissions） | 显式文件夹授权 + 操作前确认 + 管理员开关 |
-| **凭据安全** | 云端版凭据永不进入沙箱 | 对话存本地，审计日志不捕获 |
-| **合规** | 未明确说明限制 | 明确不适合 HIPAA / FedRAMP / FSI |
+多 Agent 并行规划，支持任务自动拆解
 
-## 3.4 功能矩阵对比
+规划层（Planning Layer）：请求分析 → 上下文理解 → 路线图创建
 
-| 功能 | Claude Code | Cowork |
-|------|:-----------:|:------:|
-| 代码编写与编辑 | ✅ 核心能力 | ❌ |
-| Git 操作 | ✅ 完整集成 | ❌ |
-| 代码审查 | ✅ CI/CD 自动化 | ❌ |
-| 本地文件整理 | ⚠️ 可以但非重点 | ✅ 核心能力 |
-| 文档/报告生成 | ⚠️ 技术文档 | ✅ 各类商务文档 |
-| 数据提取与结构化 | ⚠️ 代码层面 | ✅ 核心能力 |
-| 屏幕控制（Computer Use） | ✅ Desktop macOS | ✅ 桌面端 |
-| 定时任务 | ✅ 本地 + 云端 | ✅ |
-| 手机远程发送 | ✅ Remote Control | ✅ |
-| 跨会话记忆 | ✅ CLAUDE.md + Auto Memory | ✅ |
-| 多代理协同 | ✅ Agent Teams | ✅ Dispatch → Code |
-| MCP 连接 | ✅ | ✅ 通过连接器 |
-| 管道/脚本化 | ✅ Unix 哲学 | ❌ |
-| Agent SDK | ✅ | ❌ |
+执行引擎
 
-## 3.5 定价对比
+本地 Node.js 运行时 + Skills 脚本执行
 
-两者共享 Claude 的订阅体系（来源：[claude.com/pricing](https://claude.com/pricing)）：
+沙盒隔离执行引擎（VZVirtualMachine）+ 代码执行能力
 
-| 计划 | 月费 | Claude Code | Cowork | 说明 |
-|------|------|:-----------:|:------:|------|
-| **Free** | $0 | ❌ | ❌ | 不包含 |
-| **Pro** | $20/月 | ✅ | ✅ | Cowork 消耗限额比 Chat 更快 |
-| **Max 5x** | $100/月 | ✅ | ✅ | 5 倍于 Pro 的使用量 |
-| **Max 20x** | $200/月 | ✅ | ✅ | 20 倍使用量，重度用户适用 |
-| **Team** | $20-100/席/月 | ✅ | ✅ | 标准席位 vs 高级席位 |
-| **Enterprise** | $20/席 + API | ✅ | ✅ | 管理员可全局控制开关 |
-| **API** | 按 Token 付费 | ✅ | — | 开发者直接调用 |
+协作层
 
-> ⚠️ **注意**：Cowork 任务消耗的 Rate Limit 比普通 Chat 多得多，因为它需要协调多个子代理和工具调用。Pro 用户使用 Cowork 时可能很快就会触达限额。
+多 Agent 并行 + 主 Agent 编排
 
-## 3.6 选型建议
+子代理协调系统：主代理编排 + 多子代理并行
 
-### 选 Claude Code 的场景
-- 你是**开发者**或 DevOps
-- 需要**写代码、Debug、做代码审查**
-- 需要**CI/CD 自动化**
-- 需要**管道脚本集成**和 Agent SDK
-- 需要**多代理团队协同**开发
+扩展层
 
-### 选 Cowork 的场景
-- 你是**非技术岗**（市场、运营、法务、金融）
-- 需要**整理文件、生成报告**
-- 需要从**合同/发票/截图中提取数据**
-- 需要**跨应用自动化办公**
-- 需要**手机下达指令、桌面自动执行**
+Skills 插件 + MCP Server + IM Bot
 
-### 两者协同的场景
-- Cowork 的 **Dispatch** 可以自动调用 Claude Code 处理技术任务
-- 同一个桌面应用中，Cowork 和 Code 是并列的标签页，随时切换
-- 用 Cowork 做需求分析和文档，用 Code 做实现
+Plugins + Connectors + MCP +  .claude-instructions
 
----
+安全层
 
-# 第四部分：统一引擎与产品矩阵
+文件夹授权 + Skill 标准化 + 危险操作拦截
 
-## 4.1 Claude Execution Engine (CEE)
+VM 沙盒隔离 + 计划审批 + 权限文件夹 + 人工确认
 
-Claude Code 和 Cowork 共享同一个底层引擎——**Claude Execution Engine**。这意味着：
+运行依赖
 
-- 配置（如 CLAUDE.md）在各端同步
-- 记忆（Auto Memory）跨会话持久
-- 会话可以在不同设备间传递（Teleport）
-- 模型能力一致（Opus / Sonnet）
+Node.js + Git + .NET（Windows）
 
-## 4.2 Anthropic 的完整代理产品矩阵
+Claude Desktop 应用（无额外依赖）
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                Claude Execution Engine (CEE)              │
-├─────────────┬─────────────┬──────────────┬──────────────┤
-│  Claude Code │   Cowork    │  Claude Chat  │  Agent SDK   │
-│  (开发者)    │  (所有人)    │  (对话)       │  (自定义)    │
-├─────────────┼─────────────┼──────────────┼──────────────┤
-│ CLI         │ 桌面标签页    │ Web / App    │ API          │
-│ VS Code     │ 手机远程      │              │ 自定义 Agent │
-│ JetBrains   │              │              │              │
-│ Desktop     │              │              │              │
-│ Web         │              │              │              │
-│ GitHub CI   │              │              │              │
-└─────────────┴─────────────┴──────────────┴──────────────┘
-```
+### Cowork 架构
 
-## 4.3 发展时间线
+桌面/手机 指令
 
-| 时间 | 事件 |
-|------|------|
-| 2025 年中 | Claude Code 以 Research Preview 发布 |
-| 2025年10月 | Claude Code 沙箱工程博客发布 |
-| 2025年底 | Claude Code 成长为"十亿美元产品"（Anthropic 官方说法） |
-| 2026年1月12日 | **Cowork 以 Research Preview 发布** |
-| 2026年1月13日 | **Anthropic Labs 团队正式公布**（Mike Krieger 领衔） |
-| 2026年2月 | Cowork 支持 Windows |
-| 2026年2月24日 | "The Briefing: Enterprise Agents" 虚拟活动 |
-| 2026年3月17日 | Claude Code with GUI JetBrains 插件上线 |
-| 2026年3月23日 | Cowork Computer Use 更新 |
+→
 
----
+规划层
 
-# 第五部分：学习资料与参考链接
+分析 + 上下文
 
-## 5.1 Claude Code 官方资料
+→
 
-| 资料 | 链接 | 说明 |
-|------|------|------|
-| 📖 官方文档总览 | [code.claude.com/docs/en/overview](https://code.claude.com/docs/en/overview) | 核心概念、功能列表、架构 |
-| 🖥 Desktop 文档 | [code.claude.com/docs/en/desktop](https://code.claude.com/docs/en/desktop) | 桌面应用完整功能 |
-| ⌨️ CLI 参考 | [code.claude.com/docs/en/cli-reference](https://code.claude.com/docs/en/cli-reference) | 完整命令行参考 |
-| 🔒 沙箱工程博客 | [anthropic.com/engineering/claude-code-sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing) | 安全架构深度解析 |
-| 🤖 Agent Teams | [code.claude.com/docs/en/agent-teams](https://code.claude.com/docs/en/agent-teams) | 多代理团队文档 |
-| ⚙️ GitHub Actions | [code.claude.com/docs/en/github-actions](https://code.claude.com/docs/en/github-actions) | CI/CD 集成指南 |
-| 🧠 Memory (CLAUDE.md) | [code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory) | 项目记忆系统 |
-| 🪝 Hooks | [code.claude.com/docs/en/hooks](https://code.claude.com/docs/en/hooks) | 自动化工作流 |
-| 💻 VS Code 扩展 | [code.claude.com/docs/zh-CN/vs-code](https://code.claude.com/docs/zh-CN/vs-code) | VS Code GUI 完整文档（中文） |
+执行引擎
 
-## 5.2 Cowork 官方资料
+沙盒 VM
 
-| 资料 | 链接 | 说明 |
-|------|------|------|
-| 🏠 官方产品页（Anthropic） | [anthropic.com/product/claude-cowork](https://www.anthropic.com/product/claude-cowork) | 产品定位和功能介绍 |
-| 📋 官方产品页（Claude） | [claude.com/product/cowork](https://claude.com/product/cowork) | 技术细节、安全、FAQ |
-| 🧪 Anthropic Labs 公告 | [anthropic.com/news/introducing-anthropic-labs](https://www.anthropic.com/news/introducing-anthropic-labs) | 发布背景和团队介绍 |
-| 🎥 官方 Webinar | [anthropic.com/webinars/future-of-ai-at-work-introducing-cowork](https://www.anthropic.com/webinars/future-of-ai-at-work-introducing-cowork) | 官方介绍视频 |
-| 💰 定价页面 | [claude.com/pricing](https://claude.com/pricing) | 各计划功能对比 |
+→
 
-## 5.3 第三方学习资料（补充参考）
+子代理协调
 
-| 资料 | 链接 | 说明 |
-|------|------|------|
-| CoWork vs Agent Team 选型指南 | [jzhix.com/article/2026-03/cowork-selection-guide](https://www.jzhix.com/article/2026-03/2026-03-18-cowork-selection-guide.md) | 含真实成本数据的选型分析 |
-| Cowork 深度解析 | [blog.eimoon.com](https://blog.eimoon.com/p/claude-cowork-tutorial-anthropic-ai-desktop-agent/) | 三个完整实操案例 |
-| CSDN 实操教程 | [csdn.net](https://blog.csdn.net/starzhou/article/details/158495620) | 步骤详细的入门教程 |
-| CC GUI（开源） | [JetBrains 插件市场](https://plugins.jetbrains.com/plugin/29342-cc-gui-claude-or-codex-) | Claude Code + Codex 双引擎 GUI，MIT 开源 |
+→
 
----
+连接器 / 浏览器 / 屏幕
 
-> **免责声明**：本文档基于 2026年3月24日可获取的公开资料编写。Claude Code 和 Cowork 均在快速迭代中，部分功能可能已更新。建议以官方文档为准。
+→
+
+交付 + 审核
+
+⚠️ 关键差异：运行环境依赖
+
+**WorkBuddy** 需要用户手动安装 Node.js、Git、.NET 等运行环境——90% 的"插件跑不通"问题都出在这里。
+
+**Cowork** 零依赖安装——Claude Desktop 内置了一切，但代价是用户无法自由扩展底层运行时。
+
+Section 04
+
+## 工作模式详解
+
+### WorkBuddy 三大模式
+
+⚡
+
+Craft 模式
+
+**角色**：精细掌控的"执行家"
+
+**权限**：最高——可读写文件、运行命令、执行脚本
+
+**适用**：完全信任 AI 时，让它全速跑
+
+**交互**：说一句，AI 立即动手干
+
+类比：给同事一个明确指令，"你去做吧"
+
+📋
+
+Plan 模式
+
+**角色**：自动规划的"项目经理"
+
+**权限**：中等——先出方案，用户确认后才执行
+
+**适用**：复杂任务、需要审查的场景
+
+**交互**：AI 先列计划清单 → 你确认 → 再执行
+
+类比：PM 先写 PRD，你审批后才开工
+
+💬
+
+Ask 模式
+
+**角色**：保守的"顾问"
+
+**权限**：最低——只读文件、只回答问题
+
+**适用**：查资料、问方案、不想让 AI 动任何东西
+
+**交互**：纯对话，不修改任何文件
+
+类比：问咨询师意见，但决策权在你
+
+### Claude Cowork 工作流程
+
+Cowork 没有显式的"模式切换"——它的控制粒度体现在**执行流程**中：
+
+1. 描述需求
+
+→
+
+2. Claude 展示计划
+
+→
+
+3. 用户审批
+
+→
+
+4. 逐步执行
+
+遇到不确定会暂停询问
+
+→
+
+5. 交付结果 + 日志
+
+🟣 Cowork 的"隐式模式"
+
+虽然 Cowork 没有 Craft/Plan/Ask 的显式切换，但你可以通过 **提示词** 控制行为：
+
+• "帮我分析这些文件但不要修改" → 类似 Ask 模式
+
+• "先列出你的计划" → 类似 Plan 模式
+
+• "直接整理这个文件夹" → 类似 Craft 模式
+
+**核心差异**：WorkBuddy 把模式做成了产品级的 UI 开关，Cowork 靠用户的提示词"软控制"。
+
+对比项  WorkBuddy  Claude Cowork
+
+模式切换方式  UI 下拉菜单明确选择  提示词隐式控制
+
+权限粒度  三档：全权 / 审批 / 只读  统一：展示计划 → 审批 → 执行
+
+灵活性  适合不同信任度的场景快速切换  简化用户决策，始终有审批环节
+
+安全感  Ask 模式 = 绝对安全  默认就有计划审批，但无"纯只读"保证
+
+Section 05
+
+## 文件操作能力对比
+
+能力  WorkBuddy  Claude Cowork
+
+本地文件读写  ✓ 直接操作  ✓ 沙盒内操作
+
+批量文件处理  ✓ 按日期分类、批量重命名、批量修改  ✓ 按类型分类、重命名、清理旧文件
+
+Excel 处理  ✓ 数据清洗、统计、跨表匹配、生成图表  ✓ 数据提取、公式计算、可视化图表
+
+PPT 生成  ✓ 从数据/主题自动生成  ✓ 结合模板和源材料生成
+
+Word 文档  ✓ 报告、文档生成  ✓ 会议纪要、摘要文档
+
+PDF 处理  ✓ 读取分析  ✓ 发票 OCR → 表格
+
+图片处理  部分（依赖 Skills）  ✓ OCR 识别、截图分析
+
+代码文件  ✓ 读写（继承 CodeBuddy）  ✓ 完整代码操作（继承 Claude Code）
+
+文件搜索  ✓ 内容级精准搜索  ✓ 文件夹内全文搜索
+
+文件安全  文件夹授权 + 高危拦截  沙盒隔离 + 计划审批
+
+### 实战指令对比
+
+WorkBuddy 指令示例
+
+"把 E 盘 WorkBuddy 文件夹里，2026 年 3 月的所有 md 文章，
+
+按发布日期分类，每个日期建一个文件夹，把文章归档进去"
+
+"给所有归档的 md 文章，开头统一加上版权声明，
+
+结尾加上公众号引流话术"
+
+"帮我找 E 盘里，内容同时包含'AI'和'Agent'的所有文档，
+
+按修改时间倒序排列"
+
+"帮我删除桌面超过 6 个月没打开的安装包、压缩包，
+
+只保留工作文档"
+
+"基于 2026年Q1运营数据.xlsx 生成季度复盘PPT"
+
+Claude Cowork 指令示例
+
+"Organize all files in my Downloads folder. Sort images
+
+into Photos, documents into Documents, archives into
+
+Archives, and delete anything older than 6 months."
+
+"Extract all sales data from the PDF invoices in my
+
+Invoices folder and create an Excel spreadsheet with
+
+monthly totals, charts, and trend analysis."
+
+"Take my meeting notes from notes.txt and create a
+
+professional summary document with action items,
+
+key decisions, and attendee responsibilities."
+
+"Identify receipt screenshots, extract dates/amounts/
+
+merchants, generate an Excel with totals and highlight
+
+items over $100."
+
+Section 06
+
+## 技能系统 & 插件生态
+
+维度  WorkBuddy Skills  Cowork Plugins
+
+扩展形式  Skills 技能包 + MCP Server  Plugins + Connectors + MCP
+
+安装方式  从 GitHub / 市场拉取， bun  运行   skills.sh  平台一键安装 / 企业私有市场
+
+存储格式  脚本文件 + 配置   SKILL.md  Markdown 文件（可版本控制）
+
+运行环境  依赖 Node.js / Git / .NET  Claude Desktop 内置沙盒
+
+生态来源  OpenClaw 社区 + 自定义  Anthropic 官方 + skills.sh 社区 + 企业私有
+
+企业市场   未提及    私有插件市场 + 管理员控制（2026.2.24）
+
+代表插件  公众号排版、表格处理、视频剪辑、爬虫、微信 Bot  数据分析、邮件管理、文档生成、翻译、社媒管理
+
+自定义难度  低（支持零代码自然语言定义）  中（需编写 SKILL.md）
+
+IM 类技能   WeixinBot / Wecom / Feishu / Dingtalk    Slack 连接器（Team 计划）
+
+🦞 WorkBuddy 技能系统的杀手锏
+
+**IM 联动**是 WorkBuddy 最大的差异化优势。你可以从微信给 AI 发一条消息，电脑上就自动开始干活——出差时远程让 AI 帮你排版文件、导出数据、发送报告。Cowork 目前的跨设备同步仅限于 Claude 自家的手机 ↔ 桌面端。
+
+🟣 Cowork 插件系统的杀手锏
+
+**三方 SaaS 连接器**（30+）+ **Cron 定时任务** + **Computer Use** 三者联合，形成了极强的办公自动化能力。比如：每周五自动从 Google Drive 拉数据 → 生成 Excel 周报 → 推送到 Slack。WorkBuddy 目前在三方 SaaS 直连方面相对较弱。
+
+Section 07
+
+## 多智能体 & 协作机制
+
+WorkBuddy 多 Agent 并行
+
+**机制**：支持多个 Agent 同时处理不同子任务，主 Agent 负责编排和调度。
+
+**特点**：
+
+- 多任务并行执行，极致提效
+
+- 每个 Agent 可独立调用不同 Skills
+
+- 主 Agent 汇总各子 Agent 结果后统一交付
+
+- 适合大规模批量处理（如同时分析100个文件）
+
+Cowork 子代理协调
+
+**机制**：协调器管理多个子代理（Sub-agent），每个负责任务的一部分。
+
+**特点**：
+
+- 主代理规划全局 → 子代理并行执行
+
+- 子代理之间可共享上下文
+
+- 透明的推理过程——能看到每个子代理在做什么
+
+- 官方称为"市场独有功能"（竞品 Copilot/ChatGPT 不支持）
+
+Section 08
+
+## 平台集成 & 连接器
+
+集成类别  WorkBuddy  Claude Cowork
+
+即时通讯  微信 / 企业微信 / 飞书 / 钉钉 / QQ  Slack（Team 计划）
+
+云存储  通过 MCP 可扩展  Google Drive, Dropbox
+
+邮件  通过 Skills 可扩展  Gmail, Outlook, Exchange
+
+协作工具  通过 MCP 可扩展  Notion, Asana, Teams
+
+CRM / 销售  通过 Skills 可扩展  HubSpot, Salesforce, Apollo, Clay
+
+Office 插件  生成 Office 文件（不是插件形态）  Excel 和 PPT 深度插件 + 共享上下文
+
+电子签名  —  DocuSign, Dropbox Sign
+
+内容平台  公众号排版（通过 Skills）  WordPress, Medium
+
+金融数据  —  Bloomberg Terminal, Stripe
+
+计算机控制   不支持   Computer Use — 打开应用、导航浏览器、屏幕操作
+
+定时任务  通过 IM 远程触发  Cron 定时 + 按需触发
+
+💡 集成策略差异
+
+**WorkBuddy** 的集成重心在**中国办公生态**（微信、飞书、钉钉），且采用"MCP + Skills 可扩展"的方式，让社区自己补齐连接器。
+
+**Cowork** 的集成重心在**全球 SaaS 生态**（Google、Salesforce、Slack、Notion），且是官方直接提供的一等公民连接器。
+
+**选择依据**：如果你的办公工具链是飞书/钉钉/微信 → WorkBuddy；如果是 Google/Slack/Notion → Cowork。
+
+Section 09
+
+## 典型场景 — 谁更擅长什么
+
+场景  WorkBuddy 表现  Cowork 表现  推荐
+
+下载文件夹整理
+
+✓ 按日期/类型分类、批量重命名
+
+✓ 智能分类 + 自动清理旧文件 + 生成变更日志
+
+Cowork（日志更详细）
+
+发票批量提取
+
+✓ 多格式发票 → 报销表
+
+✓ PDF OCR → Excel + 公式 + 图表
+
+平手
+
+会议纪要 → 周报
+
+✓ 读取多文件 → 文档生成
+
+✓ 合成结构化周报 + .docx 导出
+
+平手
+
+远程控制电脑
+
+✓ 微信发指令 → 电脑自动执行
+
+手机端可发任务（需 Claude App）
+
+WorkBuddy（IM 直连更方便）
+
+CRM 数据分析
+
+需手动导出数据到本地
+
+Salesforce/HubSpot 直连 → 分析 → 报告
+
+Cowork（直连 SaaS）
+
+定时自动化
+
+通过 IM 远程触发（非自动）
+
+Cron 定时 + Computer Use
+
+Cowork（真正的定时执行）
+
+中文办公生态
+
+飞书/钉钉/微信 深度集成
+
+不支持国内 IM
+
+WorkBuddy（碾压级优势）
+
+法律文档整理
+
+通用文件处理
+
+专门场景 + 时间线排序 + 战略评估
+
+Cowork（专业场景更强）
+
+私有知识库
+
+本地向量化知识库 + 优先调取
+
+.claude-instructions 文件夹规则
+
+WorkBuddy（专业知识库能力）
+
+桌面应用操作
+
+不能操控其他应用
+
+Computer Use——打开应用、点击、导航
+
+Cowork（独有能力）
+
+Section 10
+
+## 安全机制深度对比
+
+安全层面  WorkBuddy  Claude Cowork
+
+沙盒隔离  Skill 标准化执行环境  Apple VZVirtualMachine 隔离 VM
+
+文件访问控制  文件夹级授权（建议只开放工作目录）  文件夹级授权 + 任务完成后可撤销
+
+高危操作拦截  ✓ 删除系统文件、修改注册表等直接拦截  ✓ 展示计划等待审批 + 关键操作前弹窗确认
+
+操作透明度  执行前展示访问范围和步骤  实时进度指示器 + 推理过程可见 + 活动日志
+
+数据存储  全部本地，不上云  全部本地，对话历史不在 Anthropic 服务器
+
+企业合规  腾讯网关安全保障   Research Preview 不支持 HIPAA/FedRAMP ，不记入审计日志
+
+误删风险  高危操作拦截 + Ask 模式保底  ⚠️ 已有用户因指令模糊导致 rm -rf 删除 11GB 文件
+
+Prompt Injection  通过 Skill 标准化缓解  ⚠️ 官方警告恶意文件内容可能操纵 AI 执行危险操作
+
+⚠️ 两者共同的安全铁律
+
+**1. 永远使用沙盒文件夹**——不要直接授权 Home 目录或重要数据目录
+
+**2. 处理前先备份**——无论用哪个工具，批量操作前必须备份
+
+**3. 指令要清晰具体**——模糊指令是文件灾难的根源
+
+**4. 从低风险任务开始**——先用查询/分析类任务建立信任
+
+Section 11
+
+## 平台支持 & 环境要求
+
+维度  WorkBuddy  Claude Cowork
+
+macOS  ✓ Apple Silicon + Intel  ✓ 原生支持
+
+Windows  ✓ x64 + ARM64 兼容  ✓ 2026.3 新增（功能完全对等）
+
+Linux  不支持  不支持
+
+移动端  通过 IM（微信/飞书等）间接使用  Claude 手机 App（iOS/Android）
+
+Web 版  无  无（仅桌面应用）
+
+运行环境依赖  Node.js + Git + .NET（需手动安装）  零依赖（Claude Desktop 自带一切）
+
+安装复杂度  中等（需配环境，90% 问题出在这里）  低（下载安装即可）
+
+跨设备同步  通过 IM 间接实现  设置和插件可 Windows ↔ macOS 同步
+
+Section 12
+
+## 定价模型对比
+
+WorkBuddy 定价
+
+- **免费体验补贴**：新用户可免费体验
+
+- **Token 计费**：按实际使用量计费
+
+- **成本优化**：官方强调优化了模型架构降低 Token 消耗
+
+- **多模型灵活性**：可选择不同价位模型
+
+**优势**：入门门槛低，按需付费，有免费额度
+
+Claude Cowork 定价
+
+- **Pro**：$20/月 — 包含 Cowork，适合快速任务
+
+- **Max**：$100/月 或 $200/月 — 更多额度，适合日常复杂任务
+
+- **Team**：$30/座/月 — 包含 Slack 连接器
+
+- **Enterprise**：定制价格 — 管理员可控
+
+**注意**：Agent 任务比普通 Chat 消耗配额更快
+
+💰 成本分析
+
+**轻度使用**（每周几个任务）：WorkBuddy 免费额度可能够用 vs Cowork 最低 $20/月
+
+**中度使用**（每天多个任务）：两者成本趋近，取决于任务复杂度
+
+**重度使用**（大量复杂多步任务）：Cowork 的 Max 计划 $100-200/月，WorkBuddy 按量计费可能更灵活
+
+Section 13
+
+## 产品发展时间线
+
+WorkBuddy 里程碑
+
+2026.1.19
+
+腾讯内部发布
+
+WorkBuddy 在腾讯内部首次对外展示
+
+2026.2.6
+
+开放内测申请
+
+定位为"职场 AI 智能体桌面工作台"
+
+2026.3.9
+
+正式公测
+
+面向所有用户开放，2000+ 腾讯员工实测验证
+
+2026.3
+
+IM 全面接入
+
+微信/企微/飞书/钉钉/QQ 联动上线
+
+Claude Cowork 里程碑
+
+2026.1.12
+
+Research Preview 发布
+
+仅 macOS + Max 订阅用户
+
+2026.2.24
+
+插件市场 + 企业管理
+
+Team/Enterprise 可管理组织内 Cowork 插件
+
+2026.2.25
+
+计划任务上线
+
+Cron 定时 + 按需触发 + Customize 面板
+
+2026.3
+
+Windows + Computer Use
+
+Windows 功能对等 + 屏幕控制能力 + 跨设备线程
+
+Section 14
+
+## 选型决策指南
+
+### 各维度胜者一览
+
+中国办公生态集成
+
+🏆 WorkBuddy
+
+微信/飞书/钉钉/企微 全面接入，Cowork 无国内 IM
+
+全球 SaaS 连接器
+
+🏆 Claude Cowork
+
+30+ 官方连接器（Google/Slack/Salesforce/Notion）
+
+安装易用性
+
+🏆 Claude Cowork
+
+零依赖安装 vs WorkBuddy 需 Node.js/Git/.NET
+
+模型灵活性
+
+🏆 WorkBuddy
+
+5+ 模型可切换 vs Cowork 仅 Claude 单模型
+
+工作模式设计
+
+🏆 WorkBuddy
+
+三档 Craft/Plan/Ask 显式切换，安全感更强
+
+Computer Use
+
+🏆 Claude Cowork
+
+独有能力——操控屏幕、打开应用、点击按钮
+
+定时自动化
+
+🏆 Claude Cowork
+
+Cron 原生定时 vs WorkBuddy 仅 IM 手动触发
+
+入门成本
+
+🏆 WorkBuddy
+
+免费额度 + 按量计费 vs Cowork 起步 $20/月
+
+IM 远程控制
+
+🏆 WorkBuddy
+
+微信一条消息就能远程操控电脑，Cowork 无此能力
+
+企业级管理
+
+🏆 Claude Cowork
+
+私有插件市场 + SSO + 审计日志 + 数据驻留合规
+
+知识库
+
+🏆 WorkBuddy
+
+本地向量化知识库 vs Cowork 仅文件夹指令
+
+推理能力上限
+
+🏆 Claude Cowork
+
+Claude Sonnet 4.6 (1M context) 的推理深度更强
+
+### 最终选型建议
+
+🇨🇳
+
+选 WorkBuddy，如果你是...
+
+- 日常办公工具是**飞书 / 钉钉 / 微信 / 企业微信**
+
+- 需要**远程控制电脑**（出差时微信发指令干活）
+
+- 希望**多模型灵活切换**，不被单一供应商绑定
+
+- 需要搭建**私有本地知识库**
+
+- 预算敏感，希望**免费起步 + 按量付费**
+
+- 已有 **OpenClaw Skills** 存量资产
+
+- 不需要操控桌面应用程序
+
+- 对"环境配置"不抵触（愿意装 Node.js/Git）
+
+🌍
+
+选 Claude Cowork，如果你是...
+
+- 日常办公工具是 **Google Workspace / Slack / Notion / Salesforce**
+
+- 需要 **Computer Use**——让 AI 操控屏幕和应用
+
+- 需要**定时自动化任务**（每周五自动生成报告等）
+
+- 追求**零配置安装**，不想碰任何技术细节
+
+- 企业需要 **SSO / 审计日志 / 合规**等管理能力
+
+- 看重 Claude 的**推理深度**（复杂分析、法律、研究场景）
+
+- 愿意支付 **$20-200/月** 的订阅费用
+
+- 能接受 Research Preview 阶段的偶尔不稳定
+
+🤝 终极答案：它们不是替代关系，而是互补关系
+
+**WorkBuddy** 更适合**中国办公环境 + IM 驱动 + 多模型灵活性**的场景
+
+**Cowork** 更适合**全球 SaaS 生态 + 深度推理 + 定时自动化**的场景
+
+如果你同时使用飞书和 Slack、同时需要混元和 Claude——完全可以两个都用。
+
+WorkBuddy 处理国内 IM 联动和批量文件任务，Cowork 处理 SaaS 集成和定时自动化，各取所长。
+
+WorkBuddy vs Claude Cowork 深度对比分析 · 2026年3月 · 基于官方文档、产品页面与社区实测整理
