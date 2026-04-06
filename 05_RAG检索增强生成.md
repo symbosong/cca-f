@@ -1,7 +1,7 @@
 # 模块 5：RAG 检索增强生成
 
 > **对应课程**：Building with the Claude API — Module 4: Retrieval Augmented Generation  
-> **视频数量**：9 个（约 66 分钟）  
+> **视频转录**：7 个（视频 37-43，已嵌入文字）  
 > **GitHub Notebook**：无（本模块以架构设计和概念为主）  
 > **预计学习时间**：2 小时  
 > **难度**：⭐⭐⭐

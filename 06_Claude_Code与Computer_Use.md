@@ -1,7 +1,7 @@
 # 模块 6：Claude Code 与 Computer Use
 
 > **对应课程**：Building with the Claude API — Module 6: Claude Code & Computer Use  
-> **视频数量**：8 个（约 34 分钟）  
+> **视频转录**：4 个（视频 63-66，已嵌入文字）  
 > **预计学习时间**：1-2 小时  
 > **难度**：⭐⭐
 
@@ -14,17 +14,18 @@
 
 ### 📌 视频课时清单
 
-| # | 视频标题 | 时长 | 核心知识点 |
-|:-:|---------|:----:|-----------|
-| 1 | Anthropic Applications | 1m | Anthropic 产品矩阵概览 |
-| 2 | Claude Code Setup | 2m | 安装配置、首次运行 |
-| 3 | Claude Code in Action | 10m | 核心演示：代码理解、生成、重构、调试 |
-| 4 | Enhancements with MCP Servers | 3m | 给 Claude Code 接入 MCP 服务器扩展能力 |
-| 5 | Parallelizing Claude Code | 8m | 并行子代理、同时执行多个任务 |
-| 6 | Automated Debugging | 4m | 自动调试：读取错误→分析→修复→验证 |
-| 7 | Computer Use | 3m | Computer Use 概念：像人一样操作桌面 |
-| 8 | How to Use Computer Use | 3m | 工作原理：截图→坐标→动作循环 |
+| # | 视频标题 | 视频编号 | 核心知识点 |
+|:-:|---------|:-------:|-----------|
+| 1 | Anthropic Applications | 视频 63 ✅ | Anthropic 产品矩阵概览 |
+| 2 | Claude Code Setup | 视频 64 ✅ | 安装配置、首次运行 |
+| 3 | Claude Code in Action | 视频 65 ✅ | 核心演示：代码理解、生成、重构、调试 |
+| 4 | Enhancements with MCP Servers | 视频 66 ✅ | 给 Claude Code 接入 MCP 服务器扩展能力 |
+| 5 | 并行子代理 | 📝 文字 | 并行子代理、同时执行多个任务 |
+| 6 | 自动调试 | 📝 文字 | 自动调试：读取错误→分析→修复→验证 |
+| 7 | Computer Use 概念 | 📝 文字 | Computer Use 概念：像人一样操作桌面 |
+| 8 | Computer Use 工作原理 | 📝 文字 | 工作原理：截图→坐标→动作循环 |
 
+> ✅ = 有视频转录嵌入 &nbsp; 📝 = 纯文字教程（原课程中无独立视频）  
 > **阅读材料**（2 篇，10 分钟）：Module Introduction / Next Steps
 
 ---
@@ -49,10 +50,10 @@
 > 🎬 **视频 63**：Anthropic apps  
 > 📁 文件：[63. Anthropic apps.mp4](videos/63.%20Anthropic%20apps.mp4)
 
-## 核心内容
+**核心内容**
 本视频介绍了Anthropic构建的两个重要应用——Claude Code和Computer Use，并说明它们是理解Agent概念的完美入口。
 
-## 关键要点
+**关键要点**
 - **Claude Code**：基于终端的编程助手，后续将详细演示设置和使用
 - **Computer Use**：一组工具，能极大扩展Claude的能力
 - **与Agent的关系**：这两个应用是Agent的典型示例，理解它们有助于学习Agent的构建方法
@@ -96,10 +97,10 @@ Anthropic 产品概览：
 > 🎬 **视频 64**：Claude Code setup  
 > 📁 文件：[64. Claude Code setup.mp4](videos/64.%20Claude%20Code%20setup.mp4)
 
-## 核心内容
+**核心内容**
 本视频介绍Claude Code的基本概念和安装设置过程。
 
-## 关键要点
+**关键要点**
 - **Claude Code定义**：基于终端的编程助手程序，可帮助完成各种代码相关任务
 - **内置工具**：包括文件搜索/读取/编辑等基本工具，以及网页抓取和终端访问等高级工具
 - **MCP客户端**：Claude Code内置MCP客户端，可通过添加MCP服务器扩展功能
@@ -160,10 +161,10 @@ claude --verbose                         # 详细输出
 > 🎬 **视频 65**：Claude Code in action  
 > 📁 文件：[65. Claude Code in action.mp4](videos/65.%20Claude%20Code%20in%20action.mp4)
 
-## 核心内容
+**核心内容**
 通过实际项目演示Claude Code的使用方式，展示项目设置、init命令、Git集成以及两种高效编码工作流。
 
-## 关键要点
+**关键要点**
 - **核心理念**：将Claude Code视为团队中的另一位工程师，而非简单的代码生成器
 - **init命令**：自动扫描代码库，生成CLAUDE.md文件作为后续交互的上下文
 - **三种CLAUDE文件**：项目级（project）、本地级（local）、用户级（user）
@@ -266,10 +267,10 @@ claude "提交当前更改，写一个好的 commit message"
 > 🎬 **视频 66**：Enhancements with MCP servers  
 > 📁 文件：[66. Enhancements with MCP servers.mp4](videos/66.%20Enhancements%20with%20MCP%20servers.mp4)
 
-## 核心内容
+**核心内容**
 演示如何通过MCP服务器扩展Claude Code的功能，将自定义工具集成到Claude Code中。
 
-## 关键要点
+**关键要点**
 - **内嵌MCP客户端**：Claude Code内置MCP客户端，可连接MCP服务器扩展能力
 - **添加MCP服务器**：使用`claude mcp add <名称> <启动命令>`命令
 - **实际演示**：将自定义的文档转换MCP服务器连接到Claude Code，成功读取PDF/Word文档
@@ -329,7 +330,7 @@ claude mcp list
 
 ## 第 5 课：并行子代理
 
-> 📹 视频：Parallelizing Claude Code（8 min）
+> 📝 本课为纯文字教程内容
 
 ### 让 Claude Code 同时执行多个任务
 
@@ -339,7 +340,7 @@ claude mcp list
 
 ## 第 6 课：自动调试
 
-> 📹 视频：Automated Debugging（4 min）
+> 📝 本课为纯文字教程内容
 
 ### Claude Code 的自动调试循环
 
@@ -351,7 +352,7 @@ claude mcp list
 
 ## 第 7 课：Computer Use 概念
 
-> 📹 视频：Computer Use（3 min）
+> 📝 本课为纯文字教程内容
 
 ### 什么是 Computer Use？
 
@@ -365,7 +366,7 @@ Computer Use 让 Claude 通过**截屏 + 鼠标/键盘操作**来控制桌面应
 
 ## 第 8 课：Computer Use 工作原理
 
-> 📹 视频：How to Use Computer Use（3 min）
+> 📝 本课为纯文字教程内容
 
 ### 核心工具
 

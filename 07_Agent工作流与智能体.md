@@ -1,7 +1,7 @@
 # 模块 7：Agent 工作流与智能体
 
 > **对应课程**：Building with the Claude API — Module 7: Agents and Workflows  
-> **视频数量**：7 个（约 26 分钟）  
+> **视频转录**：8 个（视频 67-74，已嵌入文字）  
 > **预计学习时间**：1-2 小时  
 > **难度**：⭐⭐⭐
 
@@ -48,10 +48,10 @@
 > 🎬 **视频 67**：Agents and workflows  
 > 📁 文件：[67. Agents and workflows.mp4](videos/67.%20Agents%20and%20workflows.mp4)
 
-## 核心内容
+**核心内容**
 介绍工作流与Agent的核心概念和区别，并通过3D建模应用演示"评估器-优化器"工作流模式。
 
-## 关键要点
+**关键要点**
 - **工作流 vs Agent**：知道精确步骤→用工作流；不确定具体步骤→用Agent
 - **评估器-优化器模式**：生产者生成输出 → 评分者评估 → 不满足则反馈给生产者改进 → 循环直到通过
 - **实际案例**：图片→3D模型应用，Claude描述图片→CadQuery建模→渲染检查→迭代改进
@@ -136,10 +136,10 @@ In this module, we are going to focus on workflows and agents. Let's dive in imm
 > 🎬 **视频 68**：Parallelization workflows  
 > 📁 文件：[68. Parallelization workflows.mp4](videos/68.%20Parallelization%20workflows.mp4)
 
-## 核心内容
+**核心内容**
 通过材料分析报告生成的案例，介绍并行化工作流模式及其优势。
 
-## 关键要点
+**关键要点**
 - **问题场景**：单个大提示让Claude同时分析所有材料→效果不佳
 - **并行化工作流**：将任务分解为多个并行子任务，每个子任务专注一种材料分析
 - **三步流程**：分解任务 → 并行执行子任务 → 聚合器汇总结果
@@ -239,10 +239,10 @@ async def parallel_workflow(code_to_review):
 > 🎬 **视频 69**：Chaining workflows  
 > 📁 文件：[69. Chaining workflows.mp4](videos/69.%20Chaining%20workflows.mp4)
 
-## 核心内容
+**核心内容**
 介绍链式工作流模式，特别强调其在解决Claude不遵循大型提示中约束条件这一常见问题时的重要作用。
 
-## 关键要点
+**关键要点**
 - **链式工作流**：将一个大任务分解为多个步骤，每步让Claude专注单一任务
 - **社交媒体案例**：搜索热门话题 → 选择话题 → 研究 → 编写脚本 → 生成视频 → 发布
 - **重要应用**：解决Claude在大型提示中不遵循约束的问题
@@ -341,10 +341,10 @@ def chain_workflow(user_request):
 > 🎬 **视频 70**：Routing workflows  
 > 📁 文件：[70. Routing workflows.mp4](videos/70.%20Routing%20workflows.mp4)
 
-## 核心内容
+**核心内容**
 通过社交媒体视频脚本生成案例，介绍路由工作流模式——根据输入类型选择不同处理管道。
 
-## 关键要点
+**关键要点**
 - **问题背景**：不同主题（如编程vs冲浪）需要截然不同的视频脚本风格
 - **路由工作流三步**：
   1. 路由步骤：让Claude对用户输入进行分类（教育/娱乐/喜剧等）
@@ -441,10 +441,10 @@ def routing_workflow(user_message):
 > 🎬 **视频 71**：Agents and tools  
 > 📁 文件：[71. Agents and tools.mp4](videos/71.%20Agents%20and%20tools.mp4)
 
-## 核心内容
+**核心内容**
 深入讲解Agent如何通过组合抽象工具来灵活完成各种任务，以及工具设计的关键原则。
 
-## 关键要点
+**关键要点**
 - **Agent核心能力**：以不同组合方式使用工具，灵活应对各种任务
 - **工具组合示例**：3个简单工具（获取时间/添加时长/设置提醒）可以组合解决多种场景
 - **工具设计原则——保持抽象**：
@@ -554,10 +554,10 @@ def agent_loop(user_message, tools, process_tool_fn, max_turns=20):
 > 🎬 **视频 72**：Environment inspection  
 > 📁 文件：[72. Environment inspection.mp4](videos/72.%20Environment%20inspection.mp4)
 
-## 核心内容
+**核心内容**
 讲解Agent的环境检查能力——Agent需要在采取行动后评估结果，以理解当前状态和进度。
 
-## 关键要点
+**关键要点**
 - **核心原则**：Agent在采取行动后（有时之前）需要评估操作结果，不仅仅依赖工具返回值
 - **Computer Use示例**：每次操作后都需要截图来理解新状态
 - **Claude Code示例**："写入前先读取"——修改文件前需要先了解文件当前内容
@@ -613,10 +613,10 @@ Agent 可以通过工具来"感知环境"——读取文件、查看目录结构
 > 🎬 **视频 73**：Workflows vs agents  
 > 📁 文件：[73. Workflows vs agents.mp4](videos/73.%20Workflows%20vs%20agents.mp4)
 
-## 核心内容
+**核心内容**
 系统对比工作流与Agent的优缺点，给出实际项目中的选择建议。
 
-## 关键要点
+**关键要点**
 - **工作流优势**：更高的任务完成准确率、更容易测试和评估、让Claude专注单一任务
 - **Agent优势**：更灵活、可创造性解决问题、支持动态用户交互
 - **Agent劣势**：任务成功率较低、更难测试和评估
@@ -818,10 +818,10 @@ def should_escalate(message):
 > 🎬 **视频 74**：Course Wrap Up  
 > 📁 文件：[74. Course Wrap Up.mp4](videos/74.%20Course%20Wrap%20Up.mp4)
 
-## 核心内容
+**核心内容**
 课程总结与回顾，梳理全部课程要点并推荐后续学习方向。
 
-## 关键要点
+**关键要点**
 - **课程七大模块回顾**：
   1. 模型选择（Haiku快速处理 / Sonnet高智能）
   2. API访问与参数控制（温度、停止序列、预填充等）

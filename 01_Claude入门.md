@@ -1,7 +1,7 @@
 # 模块 1：Claude 入门 — API 基础与核心概念
 
 > **对应课程**：Building with the Claude API — Module 1: Getting Started with Claude  
-> **视频数量**：10 个（约 56 分钟）  
+> **视频转录**：11 个（视频 01-11，已嵌入文字）  
 > **GitHub Notebook**：`anthropic_api_fundamentals/` 目录（6 个 Notebook）  
 > **预计学习时间**：2 小时  
 > **难度**：⭐
